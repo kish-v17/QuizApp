@@ -44,6 +44,7 @@
             this.regPwd = new Guna.UI2.WinForms.Guna2TextBox();
             this.subRegister = new Guna.UI2.WinForms.Guna2Button();
             this.pnlLogin = new Guna.UI2.WinForms.Guna2Panel();
+            this.logEml = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblLogin = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.logPwd = new Guna.UI2.WinForms.Guna2TextBox();
             this.subLogin = new Guna.UI2.WinForms.Guna2Button();
@@ -51,7 +52,6 @@
             this.btnLogin = new Guna.UI2.WinForms.Guna2Button();
             this.btnRegister = new Guna.UI2.WinForms.Guna2Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.logEml = new Guna.UI2.WinForms.Guna2TextBox();
             this.panelToggle.SuspendLayout();
             this.pnlRegister.SuspendLayout();
             this.pnlLogin.SuspendLayout();
@@ -178,6 +178,20 @@
             this.pnlLogin.Size = new System.Drawing.Size(380, 264);
             this.pnlLogin.TabIndex = 14;
             // 
+            // logEml
+            // 
+            this.logEml.BorderRadius = 10;
+            this.logEml.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.logEml.DefaultText = "";
+            this.logEml.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.logEml.Location = new System.Drawing.Point(18, 94);
+            this.logEml.Name = "logEml";
+            this.logEml.PasswordChar = '\0';
+            this.logEml.PlaceholderText = "Enter your Email";
+            this.logEml.SelectedText = "";
+            this.logEml.Size = new System.Drawing.Size(340, 40);
+            this.logEml.TabIndex = 16;
+            // 
             // lblLogin
             // 
             this.lblLogin.BackColor = System.Drawing.Color.Transparent;
@@ -257,20 +271,6 @@
             // 
             this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.errorProvider1.ContainerControl = this;
-            // 
-            // logEml
-            // 
-            this.logEml.BorderRadius = 10;
-            this.logEml.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.logEml.DefaultText = "";
-            this.logEml.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.logEml.Location = new System.Drawing.Point(18, 94);
-            this.logEml.Name = "logEml";
-            this.logEml.PasswordChar = '\0';
-            this.logEml.PlaceholderText = "Enter your Email";
-            this.logEml.SelectedText = "";
-            this.logEml.Size = new System.Drawing.Size(340, 40);
-            this.logEml.TabIndex = 16;
             // 
             // Form1
             // 
