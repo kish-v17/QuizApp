@@ -68,9 +68,9 @@
             this.panelToggle.Controls.Add(this.guna2HtmlLabel1);
             this.panelToggle.Controls.Add(this.btnLogin);
             this.panelToggle.Controls.Add(this.btnRegister);
-            this.panelToggle.Location = new System.Drawing.Point(12, 12);
+            this.panelToggle.Location = new System.Drawing.Point(250, 12);
             this.panelToggle.Name = "panelToggle";
-            this.panelToggle.Size = new System.Drawing.Size(795, 494);
+            this.panelToggle.Size = new System.Drawing.Size(794, 494);
             this.panelToggle.TabIndex = 0;
             // 
             // pnlRegister
@@ -276,7 +276,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(818, 518);
+            this.ClientSize = new System.Drawing.Size(1271, 607);
             this.Controls.Add(this.panelToggle);
             this.Name = "Form1";
             this.Text = "Login/Register Form";

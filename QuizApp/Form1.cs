@@ -51,54 +51,19 @@ namespace QuizApp
                 insertUser(regUsr.Text,regEml.Text,regCpwd.Text);
             }
         }
-        //private void subLogin_Click(object sender, EventArgs e)
-        //{
-        //    bool isValid = ValidateForm(logEml ,logPwd,false);
-
-        //    if (isValid)
-        //    {
-        //        var logRes = checkLogin(logEml.Text, logPwd.Text);
-        //        MessageBox.Show("Welcome " + logRes.Item2);
-        //        if (logRes.Item1 == 1) 
-        //        {
-
-        //            AdminDashboard ad = new AdminDashboard(logRes.Item2);
-        //            ad.Show();
-        //            this.Hide();
-        //        }
-        //        else if (logRes.Item1 == 2)
-        //        {
-        //            UserDashboard ud = new UserDashboard(logRes.Item2);
-        //            ud.Show();
-        //            this.Hide();
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Invalid Email or Password!");
-        //        }
-        //    }
-        //}
         private void subLogin_Click(object sender, EventArgs e)
         {
             bool isValid = ValidateForm(logEml, logPwd, false);
 
             if (isValid)
             {
-                var loginResult = checkLogin(logEml.Text, logPwd.Text);
-                int userType = loginResult.Item1;
-                string username = loginResult.Item2;
-
-                if (userType == 1 || userType == 2)
+                var logRes = checkLogin(logEml.Text, logPwd.Text);
+                if (logRes.Item1 != 0)
                 {
-                    string role = (userType == 1) ? "Admin" : "User";
-                    UserDashboard dashboard = new UserDashboard();
-
-                    // Use ShowDialog for smoother transition
-                    this.Hide(); // Hide current form
-                    dashboard.ShowDialog(); // Open new form modally
-
-                    // Once dashboard is closed, show this form again if needed
-                    this.Show();
+                    MessageBox.Show("Welcome " + logRes.Item2);
+                    MainDashboard md = new MainDashboard(logRes.Item1, logRes.Item2);
+                    md.Show();
+                    this.Hide();
                 }
                 else
                 {
