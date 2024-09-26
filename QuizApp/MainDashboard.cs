@@ -39,23 +39,5 @@ namespace QuizApp
         {
 
         }
-        private void btnAddQuiz_Click(object sender, EventArgs e)
-        {
-            // Clear any existing controls in pnlAddQuiz
-            pnlAddQuiz.Controls.Clear();
-
-            // Instantiate the AddQuizForm
-            AddQuizForm addQuizForm = new AddQuizForm();
-
-            // Set the form as a child of pnlAddQuiz
-            addQuizForm.TopLevel = false;
-            addQuizForm.Dock = DockStyle.Fill;
-
-            // Add the form to pnlAddQuiz
-            pnlAddQuiz.Controls.Add(addQuizForm);
-
-            // Show the form
-            addQuizForm.Show();
-        }
     }
 }

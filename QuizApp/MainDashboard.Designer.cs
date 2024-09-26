@@ -399,7 +399,7 @@
             this.btnAddQuiz.Size = new System.Drawing.Size(140, 33);
             this.btnAddQuiz.TabIndex = 3;
             this.btnAddQuiz.Text = "Add Quiz";
-            this.btnAddQuiz.Click += new System.EventHandler(this.btnAddQuiz_Click);
+            
             // 
             // btnAdminLogout
             // 
