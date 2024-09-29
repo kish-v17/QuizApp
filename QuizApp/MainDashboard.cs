@@ -56,22 +56,15 @@ namespace QuizApp
         }
         private void ConfigureQuizSetGrid()
         {
-            // Configure other columns before adding the button column
-
-            // Add the Start Button column as the last column
             DataGridViewButtonColumn startButtonColumn = new DataGridViewButtonColumn();
             startButtonColumn.Name = "StartButton";
-            startButtonColumn.HeaderText = "";  // No header text for the button column
-            startButtonColumn.Text = "Start";   // The text to display on the button
-            startButtonColumn.UseColumnTextForButtonValue = true;  // Show text on the button
-
-            // Prevent the button from resizing according to text
+            startButtonColumn.HeaderText = "";
+            startButtonColumn.Text = "Start"; 
+            startButtonColumn.UseColumnTextForButtonValue = true;
             startButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            startButtonColumn.Width = 80; // Set a fixed width for the button column
+            startButtonColumn.Width = 80;
 
-            dgvQuizList.Columns.Add(startButtonColumn);  // Add the button as the last column
-
-            // Add the event handler for button clicks
+            dgvQuizList.Columns.Add(startButtonColumn);
             dgvQuizList.CellClick += new DataGridViewCellEventHandler(dgvQuizSets_CellClick);
         }
 
@@ -79,17 +72,13 @@ namespace QuizApp
         {
             if (e.ColumnIndex == dgvQuizList.Columns["StartButton"].Index && e.RowIndex >= 0)
             {
-                // Get the QuizSet_Id from the corresponding row
                 int selectedQuizSetId = Convert.ToInt32(dgvQuizList.Rows[e.RowIndex].Cells["Sr. No."].Value);
-
-                // Call the method to start the quiz
                 StartQuiz(selectedQuizSetId);
             }
         }
 
         private void StartQuiz(int quizSetId)
         {
-            // Logic to start the quiz for the selected QuizSet_Id
             MessageBox.Show("Starting quiz for QuizSet_Id: " + quizSetId);
         }
 
