@@ -90,6 +90,7 @@
     <Compile Include="MainDashboard.Designer.cs">
       <DependentUpon>MainDashboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Question.cs" />
     <Compile Include="temp.cs">
       <SubType>Form</SubType>
     </Compile>

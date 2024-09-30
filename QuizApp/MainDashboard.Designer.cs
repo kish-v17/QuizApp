@@ -94,6 +94,15 @@
             this.btnAdminLogout = new Guna.UI2.WinForms.Guna2Button();
             this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.UserPanel = new Guna.UI2.WinForms.Guna2Panel();
+            this.pnlQuizDash = new Guna.UI2.WinForms.Guna2Panel();
+            this.lblTimer = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.lblQuestion = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.btnOptionA = new Guna.UI2.WinForms.Guna2Button();
+            this.btnOptionB = new Guna.UI2.WinForms.Guna2Button();
+            this.btnOptionC = new Guna.UI2.WinForms.Guna2Button();
+            this.btnOptionD = new Guna.UI2.WinForms.Guna2Button();
+            this.btnNext = new Guna.UI2.WinForms.Guna2Button();
+            this.btnPrevious = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             this.lblUserTabName = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.btnProfile = new Guna.UI2.WinForms.Guna2Button();
@@ -115,6 +124,7 @@
             this.sideMenuPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.UserPanel.SuspendLayout();
+            this.pnlQuizDash.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             this.pnlQuizList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuizList)).BeginInit();
@@ -830,6 +840,7 @@
             this.UserPanel.BorderColor = System.Drawing.Color.Gray;
             this.UserPanel.BorderRadius = 10;
             this.UserPanel.BorderThickness = 1;
+            this.UserPanel.Controls.Add(this.pnlQuizDash);
             this.UserPanel.Controls.Add(this.guna2Panel2);
             this.UserPanel.Controls.Add(this.pnlQuizList);
             this.UserPanel.Controls.Add(this.btnUserLogout);
@@ -838,6 +849,135 @@
             this.UserPanel.Size = new System.Drawing.Size(1235, 516);
             this.UserPanel.TabIndex = 4;
             this.UserPanel.Visible = false;
+            // 
+            // pnlQuizDash
+            // 
+            this.pnlQuizDash.BorderColor = System.Drawing.Color.Transparent;
+            this.pnlQuizDash.BorderRadius = 15;
+            this.pnlQuizDash.BorderThickness = 1;
+            this.pnlQuizDash.Controls.Add(this.lblTimer);
+            this.pnlQuizDash.Controls.Add(this.lblQuestion);
+            this.pnlQuizDash.Controls.Add(this.btnOptionA);
+            this.pnlQuizDash.Controls.Add(this.btnOptionB);
+            this.pnlQuizDash.Controls.Add(this.btnOptionC);
+            this.pnlQuizDash.Controls.Add(this.btnOptionD);
+            this.pnlQuizDash.Controls.Add(this.btnNext);
+            this.pnlQuizDash.Controls.Add(this.btnPrevious);
+            this.pnlQuizDash.FillColor = System.Drawing.Color.Transparent;
+            this.pnlQuizDash.Location = new System.Drawing.Point(213, 75);
+            this.pnlQuizDash.Name = "pnlQuizDash";
+            this.pnlQuizDash.Size = new System.Drawing.Size(1012, 432);
+            this.pnlQuizDash.TabIndex = 0;
+            this.pnlQuizDash.Visible = false;
+            // 
+            // lblTimer
+            // 
+            this.lblTimer.BackColor = System.Drawing.Color.Transparent;
+            this.lblTimer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTimer.ForeColor = System.Drawing.Color.SeaGreen;
+            this.lblTimer.Location = new System.Drawing.Point(774, 43);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(100, 23);
+            this.lblTimer.TabIndex = 1;
+            this.lblTimer.Text = "Time Left: 60";
+            // 
+            // lblQuestion
+            // 
+            this.lblQuestion.AutoSize = false;
+            this.lblQuestion.BackColor = System.Drawing.Color.Transparent;
+            this.lblQuestion.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.lblQuestion.ForeColor = System.Drawing.Color.Black;
+            this.lblQuestion.Location = new System.Drawing.Point(144, 83);
+            this.lblQuestion.MaximumSize = new System.Drawing.Size(700, 50);
+            this.lblQuestion.Name = "lblQuestion";
+            this.lblQuestion.Size = new System.Drawing.Size(700, 50);
+            this.lblQuestion.TabIndex = 2;
+            this.lblQuestion.Text = "Question will be displayed here.";
+            this.lblQuestion.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnOptionA
+            // 
+            this.btnOptionA.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionA.BorderRadius = 10;
+            this.btnOptionA.BorderThickness = 1;
+            this.btnOptionA.FillColor = System.Drawing.Color.White;
+            this.btnOptionA.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnOptionA.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionA.Location = new System.Drawing.Point(144, 211);
+            this.btnOptionA.Name = "btnOptionA";
+            this.btnOptionA.Size = new System.Drawing.Size(350, 45);
+            this.btnOptionA.TabIndex = 3;
+            this.btnOptionA.Text = "Option A";
+            // 
+            // btnOptionB
+            // 
+            this.btnOptionB.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionB.BorderRadius = 10;
+            this.btnOptionB.BorderThickness = 1;
+            this.btnOptionB.FillColor = System.Drawing.Color.White;
+            this.btnOptionB.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnOptionB.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionB.Location = new System.Drawing.Point(524, 211);
+            this.btnOptionB.Name = "btnOptionB";
+            this.btnOptionB.Size = new System.Drawing.Size(350, 45);
+            this.btnOptionB.TabIndex = 4;
+            this.btnOptionB.Text = "Option B";
+            // 
+            // btnOptionC
+            // 
+            this.btnOptionC.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionC.BorderRadius = 10;
+            this.btnOptionC.BorderThickness = 1;
+            this.btnOptionC.FillColor = System.Drawing.Color.White;
+            this.btnOptionC.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnOptionC.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionC.Location = new System.Drawing.Point(144, 271);
+            this.btnOptionC.Name = "btnOptionC";
+            this.btnOptionC.Size = new System.Drawing.Size(350, 45);
+            this.btnOptionC.TabIndex = 5;
+            this.btnOptionC.Text = "Option C";
+            // 
+            // btnOptionD
+            // 
+            this.btnOptionD.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionD.BorderRadius = 10;
+            this.btnOptionD.BorderThickness = 1;
+            this.btnOptionD.FillColor = System.Drawing.Color.White;
+            this.btnOptionD.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnOptionD.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnOptionD.Location = new System.Drawing.Point(524, 271);
+            this.btnOptionD.Name = "btnOptionD";
+            this.btnOptionD.Size = new System.Drawing.Size(350, 45);
+            this.btnOptionD.TabIndex = 6;
+            this.btnOptionD.Text = "Option D";
+            // 
+            // btnNext
+            // 
+            this.btnNext.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnNext.BorderRadius = 10;
+            this.btnNext.BorderThickness = 1;
+            this.btnNext.FillColor = System.Drawing.Color.White;
+            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnNext.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnNext.Location = new System.Drawing.Point(704, 331);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(170, 45);
+            this.btnNext.TabIndex = 7;
+            this.btnNext.Text = "Next";
+            // 
+            // btnPrevious
+            // 
+            this.btnPrevious.BorderColor = System.Drawing.Color.SeaGreen;
+            this.btnPrevious.BorderRadius = 10;
+            this.btnPrevious.BorderThickness = 1;
+            this.btnPrevious.FillColor = System.Drawing.Color.White;
+            this.btnPrevious.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.btnPrevious.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnPrevious.Location = new System.Drawing.Point(144, 331);
+            this.btnPrevious.Name = "btnPrevious";
+            this.btnPrevious.Size = new System.Drawing.Size(170, 45);
+            this.btnPrevious.TabIndex = 8;
+            this.btnPrevious.Text = "Previous";
             // 
             // guna2Panel2
             // 
@@ -989,6 +1129,8 @@
             this.sideMenuPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.UserPanel.ResumeLayout(false);
+            this.pnlQuizDash.ResumeLayout(false);
+            this.pnlQuizDash.PerformLayout();
             this.guna2Panel2.ResumeLayout(false);
             this.guna2Panel2.PerformLayout();
             this.pnlQuizList.ResumeLayout(false);
@@ -1035,5 +1177,14 @@
         private Guna.UI2.WinForms.Guna2Panel pnlQuizList;
         private Guna.UI2.WinForms.Guna2Button btnUserLogout;
         private Guna.UI2.WinForms.Guna2DataGridView dgvQuizList;
+        private Guna.UI2.WinForms.Guna2Panel pnlQuizDash;
+        private Guna.UI2.WinForms.Guna2HtmlLabel lblTimer;
+        private Guna.UI2.WinForms.Guna2HtmlLabel lblQuestion;
+        private Guna.UI2.WinForms.Guna2Button btnOptionA;
+        private Guna.UI2.WinForms.Guna2Button btnOptionB;
+        private Guna.UI2.WinForms.Guna2Button btnOptionC;
+        private Guna.UI2.WinForms.Guna2Button btnOptionD;
+        private Guna.UI2.WinForms.Guna2Button btnNext;
+        private Guna.UI2.WinForms.Guna2Button btnPrevious;
     }
 }

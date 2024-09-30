@@ -47,32 +47,63 @@ namespace QuizApp
                 UserPanel.Visible = true;
                 AdminPanel.Visible = false;
                 lblUserTabName.Text = "Welcome " + username;
-                
                 LoadQuizSets();
                 ConfigureQuizSetGrid();
-
-
             }
         }
         private void ConfigureQuizSetGrid()
         {
-            DataGridViewButtonColumn startButtonColumn = new DataGridViewButtonColumn();
-            startButtonColumn.Name = "StartButton";
-            startButtonColumn.HeaderText = "";
-            startButtonColumn.Text = "Start"; 
-            startButtonColumn.UseColumnTextForButtonValue = true;
-            startButtonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            startButtonColumn.Width = 80;
+            DataGridViewTextBoxColumn startLabelColumn = new DataGridViewTextBoxColumn();
+            startLabelColumn.Name = "StartLabel";
+            startLabelColumn.HeaderText = "";
+            startLabelColumn.ReadOnly = true; 
+            startLabelColumn.Width = 50; 
 
-            dgvQuizList.Columns.Add(startButtonColumn);
+            dgvQuizList.Columns.Add(startLabelColumn); 
             dgvQuizList.CellClick += new DataGridViewCellEventHandler(dgvQuizSets_CellClick);
+            dgvQuizList.CellPainting += new DataGridViewCellPaintingEventHandler(dgvQuizList_CellPainting);
         }
+
+        private void dgvQuizList_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex == dgvQuizList.Columns["StartLabel"].Index && e.RowIndex >= 0)
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                string buttonText = "Start";
+                Size textSize = TextRenderer.MeasureText(buttonText, e.CellStyle.Font);
+
+                int x = e.CellBounds.X + (e.CellBounds.Width - textSize.Width) / 2;
+                int y = e.CellBounds.Y + (e.CellBounds.Height - textSize.Height) / 2;
+
+                Rectangle textBackgroundRect = new Rectangle(x - 5, y - 2, textSize.Width + 10, textSize.Height + 4); 
+
+                using (Brush buttonBrush = new SolidBrush(Color.SeaGreen)) // Background color set to seagreen
+                {
+                    e.Graphics.FillRectangle(buttonBrush, textBackgroundRect);
+                }
+
+                using (Pen borderPen = new Pen(Color.DarkSeaGreen))
+                {
+                    e.Graphics.DrawRectangle(borderPen, textBackgroundRect);
+                }
+
+                using (Font boldFont = new Font(e.CellStyle.Font, FontStyle.Bold))
+                {
+                    TextRenderer.DrawText(e.Graphics, buttonText, boldFont, new Point(x, y), Color.White);
+                }
+
+                e.Handled = true;
+            }
+        }
+
 
         private void dgvQuizSets_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == dgvQuizList.Columns["StartButton"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == dgvQuizList.Columns["StartLabel"].Index && e.RowIndex >= 0)
             {
                 int selectedQuizSetId = Convert.ToInt32(dgvQuizList.Rows[e.RowIndex].Cells["Sr. No."].Value);
+
                 StartQuiz(selectedQuizSetId);
             }
         }
@@ -80,12 +111,71 @@ namespace QuizApp
         private void StartQuiz(int quizSetId)
         {
             MessageBox.Show("Starting quiz for QuizSet_Id: " + quizSetId);
+            pnlQuizList.Visible = false;
+            pnlQuizDash.Visible = true;
+
+            List<Question> questions = GetQuestionsByQuizId(quizSetId);
+
+            if (questions.Count > 0)
+            {
+                // Display the first question as an example
+                DisplayQuestion(questions[0]);
+            }
+            else
+            {
+                MessageBox.Show("No questions found for this quiz.");
+            }
+        }
+
+        private void DisplayQuestion(Question question)
+        {
+            lblQuestion.Text = question.QuestionText;
+            btnOptionA.Text = "A. "+question.OptionA;
+            btnOptionB.Text = "B. " + question.OptionB;
+            btnOptionC.Text = "C. " + question.OptionC;
+            btnOptionD.Text = "D. " + question.OptionD;
+
+            // You can also add additional logic here to handle navigation between questions
         }
 
 
+        private List<Question> GetQuestionsByQuizId(int quizSetId)
+        {
+            List<Question> questions = new List<Question>();
+
+            try
+            {
+                getCon();
+                string query = "SELECT Que_Text, Option1, Option2, Option3, Option4, Correct FROM Question_tbl WHERE Que_Set_Id = @quizSetId";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@quizSetId", quizSetId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    questions.Add(new Question
+                    {
+                        QuestionText = reader["Que_Text"].ToString(),
+                        OptionA = reader["Option1"].ToString(),
+                        OptionB = reader["Option2"].ToString(),
+                        OptionC = reader["Option3"].ToString(),
+                        OptionD = reader["Option4"].ToString(),
+                        CorrectOption = reader["Correct"].ToString()
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error fetching questions: " + ex.Message);
+            }
+
+            return questions;
+        }
         private void LoadQuizSets()
         {
-            try
+            try                                                                                                                                  
             {
                 getCon();
                 string query = "SELECT ROW_NUMBER() OVER(ORDER BY QuizSet_ID) AS [Sr. No.], QuizSet_Title AS [Quiz Category], QuizSet_Desc AS [Quiz Description] FROM QuizSet_tbl";

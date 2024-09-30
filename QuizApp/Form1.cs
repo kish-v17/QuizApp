@@ -91,7 +91,7 @@ namespace QuizApp
 
             getCon();
 
-            cmd = new SqlCommand("select * from Users_tbl where Email = @email and Password = @pwd", con);
+            cmd = new SqlCommand("SELECT * FROM Users_tbl WHERE Email = @email AND Password = @pwd", con);
             cmd.Parameters.AddWithValue("@email", email.ToLower());
             cmd.Parameters.AddWithValue("@pwd", password);
 
@@ -100,11 +100,17 @@ namespace QuizApp
             if (r.Read())
             {
                 role = Convert.ToInt32(r["Roll"]);
-                username = r["Username"].ToString(); 
+                username = r["Username"].ToString();
+
+                if (!string.IsNullOrEmpty(username))
+                {
+                    username = username.Split(' ')[0];      
+                }
             }
 
             return new Tuple<int, string>(role, username);
         }
+
 
         private bool isRegistered(string email)
         {
