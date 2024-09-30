@@ -314,6 +314,7 @@ namespace QuizApp
             pnlAddQue.Visible = true;
             lblTabName.Text = "Add Questions";
             fillCombo();
+            clear();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -331,7 +332,7 @@ namespace QuizApp
                 cmd.Parameters.AddWithValue("@cor", txtCorAns.Text);
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Question inserted successfully!");
-
+                clear();
                 pnlAddQue.Visible = false;
                 pnlAddQuiz.Visible = false;
                 pnlShowQuiz.Visible = true;
@@ -458,6 +459,18 @@ namespace QuizApp
             {
                 MessageBox.Show("Error loading quiz data: " + ex.Message);
             }
+        }
+        private void clear()
+        {
+            txtCorAns.Text = "";
+            txtOpt1.Text = "";
+            txtOpt2.Text = "";
+            txtOpt3.Text = "";
+            txtOpt4.Text = "";
+            txtQuestion.Text = "";
+            txtQuizDescription.Text = "";
+            txtQuizName.Text = "";
+            cmbQuizSet.SelectedIndex = 0;
         }
     }
 
