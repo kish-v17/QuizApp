@@ -18,6 +18,8 @@ namespace QuizApp
         string conStr;
         SqlConnection con;
         SqlCommand cmd;
+        private int currentQuestionIndex = 0;
+        private List<Question> questions;
         void getCon()
         {
             conStr = ConfigurationManager.ConnectionStrings["dbCon"].ConnectionString;
@@ -114,12 +116,12 @@ namespace QuizApp
             pnlQuizList.Visible = false;
             pnlQuizDash.Visible = true;
 
-            List<Question> questions = GetQuestionsByQuizId(quizSetId);
+            questions = GetQuestionsByQuizId(quizSetId); // Fetch questions
 
             if (questions.Count > 0)
             {
-                // Display the first question as an example
-                DisplayQuestion(questions[0]);
+                currentQuestionIndex = 0; // Reset index
+                DisplayQuestion(questions[currentQuestionIndex]);
             }
             else
             {
@@ -127,15 +129,82 @@ namespace QuizApp
             }
         }
 
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            // Save the currently selected option
+            SaveSelectedOption(questions[currentQuestionIndex].SelectedOption);
+
+            currentQuestionIndex++; // Move to the next question
+
+            if (currentQuestionIndex < questions.Count)
+            {
+                DisplayQuestion(questions[currentQuestionIndex]);
+            }
+            else
+            {
+                ShowScore(); // End of quiz and show score
+            }
+        }
+
+        // Event handlers for option buttons
+        private void btnOptionA_Click(object sender, EventArgs e)
+        {
+            btnOptionA.FillColor = Color.DarkSeaGreen;
+            SaveSelectedOption("A");
+        }
+
+        private void btnOptionB_Click(object sender, EventArgs e)
+        {
+            btnOptionB.FillColor = Color.DarkSeaGreen;
+            SaveSelectedOption("B");
+        }
+
+        private void btnOptionC_Click(object sender, EventArgs e)
+        {
+            btnOptionC.FillColor = Color.DarkSeaGreen;
+            SaveSelectedOption("C");
+        }
+
+        private void btnOptionD_Click(object sender, EventArgs e)
+        {
+            btnOptionD.FillColor = Color.DarkSeaGreen;
+            SaveSelectedOption("D");
+        }
+
+        private void SaveSelectedOption(string selectedOption)
+        {
+            questions[currentQuestionIndex].SelectedOption = selectedOption;
+        }
+
+
+        private void ShowScore()
+        {
+            int score = 0;
+
+            foreach (var question in questions)
+            {
+                if (question.SelectedOption == question.CorrectOption)
+                {
+                    score++; 
+                }
+            }
+
+            MessageBox.Show($"Your score: {score}/{questions.Count}");
+            pnlQuizDash.Visible = false;
+            pnlQuizList.Visible = true;
+        }
+
+
         private void DisplayQuestion(Question question)
         {
             lblQuestion.Text = question.QuestionText;
-            btnOptionA.Text = "A. "+question.OptionA;
+            btnOptionA.Text = "A. " + question.OptionA;
             btnOptionB.Text = "B. " + question.OptionB;
             btnOptionC.Text = "C. " + question.OptionC;
             btnOptionD.Text = "D. " + question.OptionD;
 
-            // You can also add additional logic here to handle navigation between questions
+            question.SelectedOption = null;
         }
 
 
@@ -252,8 +321,12 @@ namespace QuizApp
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Quiz set inserted successfully!");
 
-                pnlAddQuiz.Visible = false;
+                clear();
                 pnlAddQue.Visible = false;
+                pnlAddQuiz.Visible = false;
+                pnlShowAttempts.Visible = false;
+                pnlShowUsers.Visible = false;
+                pnlShowQues.Visible = false;
                 pnlShowQuiz.Visible = true;
                 LoadQuizData();
             }
@@ -314,7 +387,6 @@ namespace QuizApp
             pnlAddQue.Visible = true;
             lblTabName.Text = "Add Questions";
             fillCombo();
-            clear();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -335,7 +407,10 @@ namespace QuizApp
                 clear();
                 pnlAddQue.Visible = false;
                 pnlAddQuiz.Visible = false;
-                pnlShowQuiz.Visible = true;
+                pnlShowAttempts.Visible = false;
+                pnlShowQuiz.Visible = false;
+                pnlShowUsers.Visible = false;
+                pnlShowQues.Visible = true;
 
             }
         }
@@ -472,6 +547,8 @@ namespace QuizApp
             txtQuizName.Text = "";
             cmbQuizSet.SelectedIndex = 0;
         }
+
+       
     }
 
 }

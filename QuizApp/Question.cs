@@ -14,5 +14,6 @@ namespace QuizApp
         public string OptionC { get; set; }
         public string OptionD { get; set; }
         public string CorrectOption { get; set; }
+        public string SelectedOption { get; set; }
     }
 }
