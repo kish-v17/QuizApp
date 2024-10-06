@@ -20,6 +20,8 @@ namespace QuizApp
         SqlCommand cmd;
         private int currentQuestionIndex = 0;
         private List<Question> questions;
+        private System.Windows.Forms.Timer quizTimer;
+        private int timeRemaining, timetaken = 0, uid, qid, score = 0;
         void getCon()
         {
             conStr = ConfigurationManager.ConnectionStrings["dbCon"].ConnectionString;
@@ -32,11 +34,12 @@ namespace QuizApp
             
         }
 
-        public MainDashboard(int role, string username)
+        public MainDashboard(int user,int role, string username)
         {
             InitializeComponent();
             AdminPanel.Visible = false;
             UserPanel.Visible = false;
+            uid = user;
 
             if (role == 1)
             {
@@ -80,7 +83,7 @@ namespace QuizApp
 
                 Rectangle textBackgroundRect = new Rectangle(x - 5, y - 2, textSize.Width + 10, textSize.Height + 4); 
 
-                using (Brush buttonBrush = new SolidBrush(Color.SeaGreen)) // Background color set to seagreen
+                using (Brush buttonBrush = new SolidBrush(Color.SeaGreen))
                 {
                     e.Graphics.FillRectangle(buttonBrush, textBackgroundRect);
                 }
@@ -115,60 +118,129 @@ namespace QuizApp
             MessageBox.Show("Starting quiz for QuizSet_Id: " + quizSetId);
             pnlQuizList.Visible = false;
             pnlQuizDash.Visible = true;
-
+            qid = quizSetId;
             questions = GetQuestionsByQuizId(quizSetId); // Fetch questions
 
             if (questions.Count > 0)
             {
                 currentQuestionIndex = 0; // Reset index
-                DisplayQuestion(questions[currentQuestionIndex]);
+                DisplayQuestion(questions[currentQuestionIndex],currentQuestionIndex+1);
+                if (quizSetId != 1)
+                {
+                    timeRemaining = 60;
+                    lblTimer.Text = "Time left : 01:00";
+                }
+                else
+                {
+                    timeRemaining = 300;
+                    lblTimer.Text = "Time left : 05:00";
+                }
+                lblTimer.ForeColor = Color.SeaGreen;
+                quizTimer = new System.Windows.Forms.Timer();
+                quizTimer.Interval = 1000; // 1 second intervals
+                quizTimer.Tick += new EventHandler(OnTimerTick);
+                quizTimer.Start();
             }
             else
             {
                 MessageBox.Show("No questions found for this quiz.");
             }
         }
-
-
-        private void btnNext_Click(object sender, EventArgs e)
+        private void OnTimerTick(object sender, EventArgs e)
         {
-            // Save the currently selected option
-            SaveSelectedOption(questions[currentQuestionIndex].SelectedOption);
+            timeRemaining--;
+            timetaken++;
 
-            currentQuestionIndex++; // Move to the next question
-
-            if (currentQuestionIndex < questions.Count)
+            lblTimer.Text ="Time left : "+ string.Format("{0:D2}:{1:D2}", timeRemaining / 60, timeRemaining % 60);
+            if (timeRemaining <= 60)
             {
-                DisplayQuestion(questions[currentQuestionIndex]);
+                lblTimer.ForeColor = Color.Red;
             }
-            else
+            if (timeRemaining <= 0)
             {
-                ShowScore(); // End of quiz and show score
+                quizTimer.Stop();
+                MessageBox.Show("Time's up!");
+                ShowScore();
+                InsertAttempt(0);
             }
         }
 
-        // Event handlers for option buttons
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            SaveSelectedOption(questions[currentQuestionIndex].SelectedOption);
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.Count)
+            {
+                DisplayQuestion(questions[currentQuestionIndex],currentQuestionIndex+1);
+            }
+            else
+            {
+                quizTimer.Stop();
+                ShowScore();
+                InsertAttempt(1);
+            }
+
+            if (currentQuestionIndex == questions.Count - 1)
+            {
+                btnNext.Text = "Show Score";
+            }
+        }
+
         private void btnOptionA_Click(object sender, EventArgs e)
         {
-            btnOptionA.FillColor = Color.DarkSeaGreen;
+            btnOptionB.FillColor = Color.White;
+            btnOptionC.FillColor = Color.White;
+            btnOptionD.FillColor = Color.White;
+            btnOptionA.FillColor = Color.SeaGreen;
+
+            btnOptionB.ForeColor = Color.SeaGreen;
+            btnOptionC.ForeColor = Color.SeaGreen;
+            btnOptionD.ForeColor = Color.SeaGreen;
+            btnOptionA.ForeColor = Color.White;
             SaveSelectedOption("A");
         }
 
         private void btnOptionB_Click(object sender, EventArgs e)
         {
-            btnOptionB.FillColor = Color.DarkSeaGreen;
+            btnOptionA.FillColor = Color.White;
+            btnOptionC.FillColor = Color.White;
+            btnOptionD.FillColor = Color.White;
+            btnOptionB.FillColor = Color.SeaGreen;
+
+            btnOptionA.ForeColor = Color.SeaGreen;
+            btnOptionC.ForeColor = Color.SeaGreen;
+            btnOptionD.ForeColor = Color.SeaGreen;
+            btnOptionB.ForeColor = Color.White;
             SaveSelectedOption("B");
         }
 
         private void btnOptionC_Click(object sender, EventArgs e)
         {
-            btnOptionC.FillColor = Color.DarkSeaGreen;
+            btnOptionA.FillColor = Color.White;
+            btnOptionB.FillColor = Color.White;
+            btnOptionD.FillColor = Color.White;
+            btnOptionC.FillColor = Color.SeaGreen;
+
+            btnOptionA.ForeColor = Color.SeaGreen;
+            btnOptionB.ForeColor = Color.SeaGreen;
+            btnOptionD.ForeColor = Color.SeaGreen;
+            btnOptionC.ForeColor = Color.White;
             SaveSelectedOption("C");
         }
 
         private void btnOptionD_Click(object sender, EventArgs e)
         {
-            btnOptionD.FillColor = Color.DarkSeaGreen;
+            btnOptionA.FillColor = Color.White;
+            btnOptionB.FillColor = Color.White;
+            btnOptionC.FillColor = Color.White;
+            btnOptionD.FillColor = Color.SeaGreen;
+
+            btnOptionB.ForeColor = Color.SeaGreen;
+            btnOptionC.ForeColor = Color.SeaGreen;
+            btnOptionA.ForeColor = Color.SeaGreen;
+            btnOptionD.ForeColor = Color.White;
             SaveSelectedOption("D");
         }
 
@@ -180,7 +252,7 @@ namespace QuizApp
 
         private void ShowScore()
         {
-            int score = 0;
+            
 
             foreach (var question in questions)
             {
@@ -196,13 +268,23 @@ namespace QuizApp
         }
 
 
-        private void DisplayQuestion(Question question)
+        private void DisplayQuestion(Question question,int cur)
         {
-            lblQuestion.Text = question.QuestionText;
+            lblQuestion.Text = cur+". "+question.QuestionText;
             btnOptionA.Text = "A. " + question.OptionA;
             btnOptionB.Text = "B. " + question.OptionB;
             btnOptionC.Text = "C. " + question.OptionC;
             btnOptionD.Text = "D. " + question.OptionD;
+
+            btnOptionA.FillColor = Color.White;
+            btnOptionB.FillColor = Color.White;
+            btnOptionC.FillColor = Color.White;
+            btnOptionD.FillColor = Color.White;
+
+            btnOptionB.ForeColor = Color.SeaGreen;
+            btnOptionC.ForeColor = Color.SeaGreen;
+            btnOptionA.ForeColor = Color.SeaGreen;
+            btnOptionD.ForeColor = Color.SeaGreen;
 
             question.SelectedOption = null;
         }
@@ -260,6 +342,8 @@ namespace QuizApp
             }
         }
 
+
+
         private bool ValidateQueForm()
         {
             bool isValid = true;
@@ -269,8 +353,13 @@ namespace QuizApp
                 errorProvider2.SetError(cmbQuizSet, "Please select a valid quiz set.");
                 isValid = false;
             }
+            if (cmbCorAns.SelectedIndex == 0)
+            {
+                errorProvider2.SetError(cmbQuizSet, "Please select a valid correct option.");
+                isValid = false;
+            }
 
-            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox>{txtQuestion,txtOpt1,txtOpt2,txtOpt3,txtOpt4,txtCorAns};
+            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox>{txtQuestion,txtOpt1,txtOpt2,txtOpt3,txtOpt4};
 
             foreach (var textField in gunaTextFields)
             {
@@ -288,7 +377,20 @@ namespace QuizApp
             return isValid;
         }
 
-
+        void InsertAttempt(int isComplete)
+        {
+            string tt = string.Format("{0:D2}:{1:D2}", timetaken / 60, timetaken % 60);
+            getCon();
+            cmd = new SqlCommand("Insert into Attempts_tbl (A_U_Id, A_Q_Id, Score, Total_Que, TimeTaken, A_Date, Completion_Status) values (@uid,@qsid,@score,@tq,@time,@date,@status)", con);
+            cmd.Parameters.AddWithValue("@uid", uid);
+            cmd.Parameters.AddWithValue("@qsid", qid);
+            cmd.Parameters.AddWithValue("@score", score);
+            cmd.Parameters.AddWithValue("@tq", questions.Count);
+            cmd.Parameters.AddWithValue("@time", tt);
+            cmd.Parameters.AddWithValue("@date", DateTime.Now);
+            cmd.Parameters.AddWithValue("@status", isComplete);
+            cmd.ExecuteNonQuery();
+        }
         private bool ValidateQuizForm()
         {
             bool isValid = true;
@@ -401,7 +503,7 @@ namespace QuizApp
                 cmd.Parameters.AddWithValue("@op2", txtOpt2.Text);
                 cmd.Parameters.AddWithValue("@op3", txtOpt3.Text);
                 cmd.Parameters.AddWithValue("@op4", txtOpt4.Text);
-                cmd.Parameters.AddWithValue("@cor", txtCorAns.Text);
+                cmd.Parameters.AddWithValue("@cor", cmbCorAns.SelectedValue);
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Question inserted successfully!");
                 clear();
@@ -537,7 +639,7 @@ namespace QuizApp
         }
         private void clear()
         {
-            txtCorAns.Text = "";
+            cmbCorAns.SelectedIndex = 0;
             txtOpt1.Text = "";
             txtOpt2.Text = "";
             txtOpt3.Text = "";
@@ -547,8 +649,6 @@ namespace QuizApp
             txtQuizName.Text = "";
             cmbQuizSet.SelectedIndex = 0;
         }
-
-       
     }
 
 }

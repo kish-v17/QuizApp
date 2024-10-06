@@ -60,8 +60,7 @@ namespace QuizApp
                 var logRes = checkLogin(logEml.Text, logPwd.Text);
                 if (logRes.Item1 != 0)
                 {
-                    MessageBox.Show("Welcome " + logRes.Item2);
-                    MainDashboard md = new MainDashboard(logRes.Item1, logRes.Item2);
+                    MainDashboard md = new MainDashboard(logRes.Item1, logRes.Item2, logRes.Item3);
                     md.Show();
                     this.Hide();
                 }
@@ -84,10 +83,11 @@ namespace QuizApp
             MessageBox.Show("Registration Successful!");
         }
 
-        private Tuple<int, string> checkLogin(string email, string password)
+        private Tuple<int, int, string> checkLogin(string email, string password)
         {
             int role = 0;
             string username = null;
+            int uid = 0;
 
             getCon();
 
@@ -99,6 +99,7 @@ namespace QuizApp
 
             if (r.Read())
             {
+                uid = Convert.ToInt32(r["UserId"]);
                 role = Convert.ToInt32(r["Roll"]);
                 username = r["Username"].ToString();
 
@@ -108,7 +109,7 @@ namespace QuizApp
                 }
             }
 
-            return new Tuple<int, string>(role, username);
+            return new Tuple<int,int, string>(uid, role, username);
         }
 
 
