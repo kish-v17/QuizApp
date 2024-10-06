@@ -70,12 +70,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdminDashboard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdminDashboard.Designer.cs">
-      <DependentUpon>AdminDashboard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,18 +85,6 @@
       <DependentUpon>MainDashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="Question.cs" />
-    <Compile Include="temp.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="temp.Designer.cs">
-      <DependentUpon>temp.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Temp2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Temp2.Designer.cs">
-      <DependentUpon>Temp2.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -119,12 +101,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="temp.resx">
-      <DependentUpon>temp.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Temp2.resx">
-      <DependentUpon>Temp2.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
