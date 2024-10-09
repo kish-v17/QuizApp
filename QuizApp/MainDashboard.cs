@@ -621,20 +621,17 @@ namespace QuizApp
             if (pnlUpdate.Visible)
             {
                 pnlUpdate.Visible = false;
-                btnShowUpdate.Text = "Update Profile";
             }
             else
             {
                 pnlUpdate.Visible = true;
-                btnShowUpdate.Text = "Hide Form";
-                txtUpdateName.Text=
             }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             getCon();
-            cmd = new SqlCommand("Update Users_tbl set Username=@user and Email=@eml where UserId=@userid')", con);
+            cmd = new SqlCommand("Update Users_tbl set Username=@user, Email=@eml where UserId=@userid", con);
             cmd.Parameters.AddWithValue("@user", txtUpdateName.Text);
             cmd.Parameters.AddWithValue("@eml", txtUpdateEmail.Text);
             cmd.Parameters.AddWithValue("@userid", uid);
@@ -644,6 +641,8 @@ namespace QuizApp
             MessageBox.Show("Profile Updated");
             fillProfile(uid);
         }
+
+        
 
         private void btnShowUsers_Click(object sender, EventArgs e)
         {
