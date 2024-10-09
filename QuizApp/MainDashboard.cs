@@ -600,6 +600,7 @@ namespace QuizApp
         {
             pnlQuizDash.Visible = false;
             pnlUserProfile.Visible = true;
+            pnlHistory.Visible = false;
             lblTabName.Text = "Profile";
             fillProfile(uid);
         }
@@ -648,6 +649,14 @@ namespace QuizApp
             pnlUserProfile.Visible = false;
             pnlHistory.Visible = false;
             lblUserTabName.Text = "Home";
+        }
+
+        private void btnViewResults_Click(object sender, EventArgs e)
+        {
+            pnlQuizDash.Visible = false;
+            pnlUserProfile.Visible = false;
+            pnlHistory.Visible = true;
+            lblUserTabName.Text = "History";
         }
 
         private void btnShowUsers_Click(object sender, EventArgs e)
