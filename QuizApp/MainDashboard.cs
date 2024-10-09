@@ -52,6 +52,7 @@ namespace QuizApp
                 UserPanel.Visible = true;
                 AdminPanel.Visible = false;
                 lblUserTabName.Text = "Welcome " + username;
+                pnlShowQuiz.Visible = true;
                 LoadQuizSets();
                 ConfigureQuizSetGrid();
             }
