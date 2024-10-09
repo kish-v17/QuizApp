@@ -326,7 +326,7 @@ namespace QuizApp
         }
         private void LoadQuizSets()
         {
-            try                                                                                                                                  
+            try
             {
                 getCon();
                 string query = "SELECT ROW_NUMBER() OVER(ORDER BY QuizSet_ID) AS [Sr. No.], QuizSet_Title AS [Quiz Category], QuizSet_Desc AS [Quiz Description] FROM QuizSet_tbl";
@@ -596,6 +596,55 @@ namespace QuizApp
             LoadQuesData();
         }
 
+        private void btnProfile_Click(object sender, EventArgs e)
+        {
+            pnlQuizDash.Visible = false;
+            pnlUserProfile.Visible = true;
+            lblTabName.Text = "Profile";
+            fillProfile(uid);
+        }
+        void fillProfile(int userid)
+        {
+            getCon();
+            SqlDataAdapter da = new SqlDataAdapter("select * from Users_tbl where UserId='"+userid+"'",con);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            lblName.Text = ds.Tables[0].Rows[0][1].ToString();
+            lblEmail.Text = ds.Tables[0].Rows[0][2].ToString();
+            txtUpdateName.Text= ds.Tables[0].Rows[0][1].ToString(); 
+            txtUpdateEmail.Text = ds.Tables[0].Rows[0][2].ToString();
+        }
+
+        private void btnShowUpdate_Click(object sender, EventArgs e)
+        {
+            if (pnlUpdate.Visible)
+            {
+                pnlUpdate.Visible = false;
+                btnShowUpdate.Text = "Update Profile";
+            }
+            else
+            {
+                pnlUpdate.Visible = true;
+                btnShowUpdate.Text = "Hide Form";
+                txtUpdateName.Text=
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            getCon();
+            cmd = new SqlCommand("Update Users_tbl set Username=@user and Email=@eml where UserId=@userid')", con);
+            cmd.Parameters.AddWithValue("@user", txtUpdateName.Text);
+            cmd.Parameters.AddWithValue("@eml", txtUpdateEmail.Text);
+            cmd.Parameters.AddWithValue("@userid", uid);
+            cmd.ExecuteNonQuery();
+            clear();
+            pnlUpdate.Visible = false;
+            MessageBox.Show("Profile Updated");
+            fillProfile(uid);
+        }
+
         private void btnShowUsers_Click(object sender, EventArgs e)
         {
             pnlAddQue.Visible = false;
@@ -624,13 +673,13 @@ namespace QuizApp
             try
             {
                 getCon();
-                string query = "Select UserId AS [Sr. no.],Username AS [User], Email from Users_tbl where Roll!=1";
+                string query = "SELECT A_Id AS[Sr No.], Username AS[Username],QuizSet_Title AS[Quiz set], Score AS [Score], Total_Que AS [Total Questions], TimeTaken AS [Time Taken], A_Date AS [Attempt Date], Completion_Status AS [Status] FROM Attempts_tbl Join Users_tbl on A_U_Id=UserId Join QuizSet_tbl on A_Q_Id=Quizset_Id";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                dgvShowUsers.DataSource = dt;
+                dgvAttempts.DataSource = dt;
             }
             catch (Exception ex)
             {
