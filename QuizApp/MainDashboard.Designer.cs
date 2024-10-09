@@ -129,6 +129,7 @@
             this.pnlQuizList = new Guna.UI2.WinForms.Guna2Panel();
             this.dgvQuizList = new Guna.UI2.WinForms.Guna2DataGridView();
             this.btnUserLogout = new Guna.UI2.WinForms.Guna2Button();
+            this.btnHome = new Guna.UI2.WinForms.Guna2Button();
             this.AdminPanel.SuspendLayout();
             this.pnlAddQue.SuspendLayout();
             this.pnlShowAttempts.SuspendLayout();
@@ -1259,6 +1260,7 @@
             // 
             this.UserSidebar.BackColor = System.Drawing.Color.SeaGreen;
             this.UserSidebar.BorderRadius = 20;
+            this.UserSidebar.Controls.Add(this.btnHome);
             this.UserSidebar.Controls.Add(this.lblUserTabName);
             this.UserSidebar.Controls.Add(this.btnProfile);
             this.UserSidebar.Controls.Add(this.btnViewResults);
@@ -1286,7 +1288,7 @@
             this.btnProfile.FillColor = System.Drawing.Color.White;
             this.btnProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnProfile.ForeColor = System.Drawing.Color.SeaGreen;
-            this.btnProfile.Location = new System.Drawing.Point(30, 139);
+            this.btnProfile.Location = new System.Drawing.Point(38, 197);
             this.btnProfile.Name = "btnProfile";
             this.btnProfile.Size = new System.Drawing.Size(140, 33);
             this.btnProfile.TabIndex = 2;
@@ -1299,7 +1301,7 @@
             this.btnViewResults.FillColor = System.Drawing.Color.White;
             this.btnViewResults.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnViewResults.ForeColor = System.Drawing.Color.SeaGreen;
-            this.btnViewResults.Location = new System.Drawing.Point(30, 195);
+            this.btnViewResults.Location = new System.Drawing.Point(38, 253);
             this.btnViewResults.Name = "btnViewResults";
             this.btnViewResults.Size = new System.Drawing.Size(140, 33);
             this.btnViewResults.TabIndex = 3;
@@ -1378,6 +1380,19 @@
             this.btnUserLogout.Size = new System.Drawing.Size(90, 33);
             this.btnUserLogout.TabIndex = 1;
             this.btnUserLogout.Text = "Log out";
+            // 
+            // btnHome
+            // 
+            this.btnHome.BorderRadius = 10;
+            this.btnHome.FillColor = System.Drawing.Color.White;
+            this.btnHome.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnHome.ForeColor = System.Drawing.Color.SeaGreen;
+            this.btnHome.Location = new System.Drawing.Point(38, 147);
+            this.btnHome.Name = "btnHome";
+            this.btnHome.Size = new System.Drawing.Size(140, 33);
+            this.btnHome.TabIndex = 4;
+            this.btnHome.Text = "Home";
+            this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
             // MainDashboard
             // 
@@ -1484,5 +1499,6 @@
         private Guna.UI2.WinForms.Guna2Button btnShowUpdate;
         private Guna.UI2.WinForms.Guna2Panel pnlHistory;
         private Guna.UI2.WinForms.Guna2DataGridView guna2DataGridView1;
+        private Guna.UI2.WinForms.Guna2Button btnHome;
     }
 }

@@ -642,7 +642,13 @@ namespace QuizApp
             fillProfile(uid);
         }
 
-        
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            pnlQuizDash.Visible = true;
+            pnlUserProfile.Visible = false;
+            pnlHistory.Visible = false;
+            lblUserTabName.Text = "Home";
+        }
 
         private void btnShowUsers_Click(object sender, EventArgs e)
         {
