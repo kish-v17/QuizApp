@@ -21,7 +21,7 @@ namespace QuizApp
         private int currentQuestionIndex = 0;
         private List<Question> questions;
         private System.Windows.Forms.Timer quizTimer;
-        private int timeRemaining, timetaken = 0, uid, qid, score = 0,up_quizid,up_queid;
+        private int timeRemaining, timetaken = 0, uid, qid, score = 0, up_quizid, up_queid;
         void getCon()
         {
             conStr = ConfigurationManager.ConnectionStrings["dbCon"].ConnectionString;
@@ -33,7 +33,7 @@ namespace QuizApp
             CenterToScreen();
         }
 
-        public MainDashboard(int user,int role, string username)
+        public MainDashboard(int user, int role, string username)
         {
             InitializeComponent();
             AdminPanel.Visible = false;
@@ -64,7 +64,7 @@ namespace QuizApp
                 ConfigureQuizSetGrid();
             }
         }
-        
+
         private bool ValidateQueForm()
         {
             bool isValid = true;
@@ -80,7 +80,7 @@ namespace QuizApp
                 isValid = false;
             }
 
-            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox>{txtQuestion,txtOpt1,txtOpt2,txtOpt3,txtOpt4};
+            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox> { txtQuestion, txtOpt1, txtOpt2, txtOpt3, txtOpt4 };
 
             foreach (var textField in gunaTextFields)
             {
@@ -98,26 +98,13 @@ namespace QuizApp
             return isValid;
         }
 
-        void InsertAttempt(int isComplete)
-        {
-            string tt = string.Format("{0:D2}:{1:D2}", timetaken / 60, timetaken % 60);
-            getCon();
-            cmd = new SqlCommand("Insert into Attempts_tbl (A_U_Id, A_Q_Id, Score, Total_Que, TimeTaken, A_Date, Completion_Status) values (@uid,@qsid,@score,@tq,@time,@date,@status)", con);
-            cmd.Parameters.AddWithValue("@uid", uid);
-            cmd.Parameters.AddWithValue("@qsid", qid);
-            cmd.Parameters.AddWithValue("@score", score);
-            cmd.Parameters.AddWithValue("@tq", questions.Count);
-            cmd.Parameters.AddWithValue("@time", tt);
-            cmd.Parameters.AddWithValue("@date", DateTime.Now);
-            cmd.Parameters.AddWithValue("@status", isComplete);
-            cmd.ExecuteNonQuery();
-        }
+
         private bool ValidateQuizForm()
         {
             bool isValid = true;
             errorProvider2.Clear();
 
-            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox> { txtQuizName,txtQuizDescription };
+            List<Guna.UI2.WinForms.Guna2TextBox> gunaTextFields = new List<Guna.UI2.WinForms.Guna2TextBox> { txtQuizName, txtQuizDescription };
 
             foreach (var textField in gunaTextFields)
             {
@@ -138,7 +125,7 @@ namespace QuizApp
             getCon();
             if (ValidateQuizForm())
             {
-                if (btnSubmitQuiz.Text == "Update") 
+                if (btnSubmitQuiz.Text == "Update")
                 {
                     cmd = new SqlCommand("update QuizSet_tbl set QuizSet_Title=@title,QuizSet_Desc=@desc where QuizSet_Id=@quizset", con);
                     cmd.Parameters.AddWithValue("@title", txtQuizName.Text);
@@ -146,7 +133,7 @@ namespace QuizApp
                     cmd.Parameters.AddWithValue("@quizset", up_quizid);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Quiz set updated successfully!");
-                } 
+                }
                 else
                 {
                     cmd = new SqlCommand("Insert into QuizSet_tbl (QuizSet_Title,QuizSet_Desc) values (@title,@desc)", con);
@@ -238,11 +225,11 @@ namespace QuizApp
                     cmd.Parameters.AddWithValue("@op3", txtOpt3.Text);
                     cmd.Parameters.AddWithValue("@op4", txtOpt4.Text);
                     cmd.Parameters.AddWithValue("@cor", cmbCorAns.SelectedItem);
-                    cmd.Parameters.AddWithValue("@que",up_queid);
+                    cmd.Parameters.AddWithValue("@que", up_queid);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Question updated successfully!");
                 }
-                else 
+                else
                 {
                     cmd = new SqlCommand("Insert into Question_tbl (Que_Set_Id, Que_Text, Option1, Option2, Option3, Option4, Correct ) values (@qid, @qText, @op1, @op2, @op3, @op4, @cor)", con);
                     cmd.Parameters.AddWithValue("@qid", cmbQuizSet.SelectedValue);
@@ -259,10 +246,10 @@ namespace QuizApp
                 pnlAddQue.Visible = false;
                 pnlAddQuiz.Visible = false;
                 pnlShowAttempts.Visible = false;
-                pnlShowQuiz.Visible = false;
+                pnlShowQuiz.Visible = true;
                 pnlShowUsers.Visible = false;
-                pnlShowQues.Visible = true;
-                LoadQuesData(qid);
+                pnlShowQues.Visible = false;
+                LoadQuizData();
 
             }
         }
@@ -271,7 +258,7 @@ namespace QuizApp
             try
             {
                 getCon();
-                string query = "SELECT QuizSet_Id, ROW_NUMBER() OVER(ORDER BY QuizSet_ID) AS [Sr. No.], QuizSet_Title AS [Quiz Category], QuizSet_Desc AS [Quiz Description] FROM QuizSet_tbl";
+                string query = "SELECT QuizSet_Id AS [Sr. No.], QuizSet_Title AS [Quiz Category], QuizSet_Desc AS [Quiz Description] FROM QuizSet_tbl";
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -280,7 +267,6 @@ namespace QuizApp
 
                 if (dgvQuizSet.Columns["View"] == null)
                 {
-                    // Add View Button
                     DataGridViewButtonColumn viewButtonColumn = new DataGridViewButtonColumn();
                     viewButtonColumn.Name = "View";
                     viewButtonColumn.Text = "View Questions";
@@ -290,7 +276,6 @@ namespace QuizApp
 
                 if (dgvQuizSet.Columns["Edit"] == null)
                 {
-                    // Add Edit Button
                     DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
                     editButtonColumn.Name = "Edit";
                     editButtonColumn.Text = "Edit";
@@ -300,7 +285,6 @@ namespace QuizApp
 
                 if (dgvQuizSet.Columns["Delete"] == null)
                 {
-                    // Add Delete Button
                     DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
                     deleteButtonColumn.Name = "Delete";
                     deleteButtonColumn.Text = "Delete";
@@ -313,10 +297,16 @@ namespace QuizApp
                 MessageBox.Show("Error loading quiz data: " + ex.Message);
             }
         }
+        private void dgvQuizSet_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            PaintButtonInCell(dgvQuizSet, e, "View", "View Questions");
+            PaintButtonInCell(dgvQuizSet, e, "Edit", "Edit");
+            PaintButtonInCell(dgvQuizSet, e, "Delete", "Delete");
+        }
 
         private void dgvQuizSet_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            qid = Convert.ToInt32(dgvQuizSet.Rows[e.RowIndex].Cells["QuizSet_ID"].Value);
+            qid = Convert.ToInt32(dgvQuizSet.Rows[e.RowIndex].Cells["Sr. No."].Value);
             if (e.RowIndex >= 0)
             {
                 if (dgvQuizSet.Columns[e.ColumnIndex].Name == "View")
@@ -335,7 +325,6 @@ namespace QuizApp
                 {
                     string quizCategory = dgvQuizSet.Rows[e.RowIndex].Cells["Quiz Category"].Value.ToString();
                     MessageBox.Show("Edit quiz set: " + quizCategory);
-                    // Code to edit the quiz set
                     fillAddQuiz(qid);
                     pnlAddQuiz.Visible = true;
                     pnlAddQue.Visible = false;
@@ -385,7 +374,7 @@ namespace QuizApp
             {
                 MessageBox.Show("Error retrieving quiz details: " + ex.Message);
             }
-            
+
         }
 
 
@@ -409,7 +398,7 @@ namespace QuizApp
                 string query = @"SELECT Q.Que_Id, Q.Que_Text, Q.Option1, Q.Option2, Q.Option3, Q.Option4, Q.Correct, QS.QuizSet_Title FROM Question_tbl Q INNER JOIN QuizSet_tbl QS ON  Q.Que_Set_Id = QS.QuizSet_Id where Q.Que_Set_Id=@quesid";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
-                da.SelectCommand.Parameters.AddWithValue("@quesid",queid);
+                da.SelectCommand.Parameters.AddWithValue("@quesid", queid);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
@@ -438,7 +427,11 @@ namespace QuizApp
                 MessageBox.Show("Error loading quiz data: " + ex.Message);
             }
         }
-
+        private void dgvShowQues_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            PaintButtonInCell(dgvShowQues, e, "Edit", "Edit");
+            PaintButtonInCell(dgvShowQues, e, "Delete", "Delete");
+        }
         private void dgvShowQues_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             qid = Convert.ToInt32(dgvShowQues.Rows[e.RowIndex].Cells["Que_ID"].Value);
@@ -538,11 +531,11 @@ namespace QuizApp
         {
             pnlAddQue.Visible = false;
             pnlAddQuiz.Visible = false;
-            pnlShowQuiz.Visible = false;
+            pnlShowQuiz.Visible = true;
             pnlShowAttempts.Visible = false;
             pnlShowUsers.Visible = false;
-            pnlShowQues.Visible = true;
-            lblTabName.Text = "Home";
+            pnlShowQues.Visible = false;
+            lblTabName.Text = "Quizes";
         }
         private void btnRecentAttempts_Click(object sender, EventArgs e)
         {
@@ -616,13 +609,13 @@ namespace QuizApp
         void fillProfile(int userid)
         {
             getCon();
-            SqlDataAdapter da = new SqlDataAdapter("select * from Users_tbl where UserId='"+userid+"'",con);
+            SqlDataAdapter da = new SqlDataAdapter("select * from Users_tbl where UserId='" + userid + "'", con);
             DataSet ds = new DataSet();
             da.Fill(ds);
 
             lblName.Text = ds.Tables[0].Rows[0][1].ToString();
             lblEmail.Text = ds.Tables[0].Rows[0][2].ToString();
-            txtUpdateName.Text= ds.Tables[0].Rows[0][1].ToString(); 
+            txtUpdateName.Text = ds.Tables[0].Rows[0][1].ToString();
             txtUpdateEmail.Text = ds.Tables[0].Rows[0][2].ToString();
         }
 
@@ -672,7 +665,7 @@ namespace QuizApp
         private void ConfigureQuizSetGrid()
         {
             DataGridViewTextBoxColumn startLabelColumn = new DataGridViewTextBoxColumn();
-            startLabelColumn.Name = "StartLabel";
+            startLabelColumn.Name = "Start";
             startLabelColumn.HeaderText = "";
             startLabelColumn.ReadOnly = true;
             startLabelColumn.Width = 50;
@@ -684,41 +677,13 @@ namespace QuizApp
 
         private void dgvQuizList_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.ColumnIndex == dgvQuizList.Columns["StartLabel"].Index && e.RowIndex >= 0)
-            {
-                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
-
-                string buttonText = "Start";
-                Size textSize = TextRenderer.MeasureText(buttonText, e.CellStyle.Font);
-
-                int x = e.CellBounds.X + (e.CellBounds.Width - textSize.Width) / 2;
-                int y = e.CellBounds.Y + (e.CellBounds.Height - textSize.Height) / 2;
-
-                Rectangle textBackgroundRect = new Rectangle(x - 5, y - 2, textSize.Width + 10, textSize.Height + 4);
-
-                using (Brush buttonBrush = new SolidBrush(Color.SeaGreen))
-                {
-                    e.Graphics.FillRectangle(buttonBrush, textBackgroundRect);
-                }
-
-                using (Pen borderPen = new Pen(Color.DarkSeaGreen))
-                {
-                    e.Graphics.DrawRectangle(borderPen, textBackgroundRect);
-                }
-
-                using (Font boldFont = new Font(e.CellStyle.Font, FontStyle.Bold))
-                {
-                    TextRenderer.DrawText(e.Graphics, buttonText, boldFont, new Point(x, y), Color.White);
-                }
-
-                e.Handled = true;
-            }
+            PaintButtonInCell(dgvQuizList, e, "Start", "Start");
         }
 
 
         private void dgvQuizList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-           if (e.ColumnIndex == dgvQuizList.Columns["StartLabel"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == dgvQuizList.Columns["Start"].Index && e.RowIndex >= 0)
             {
                 int selectedQuizSetId = Convert.ToInt32(dgvQuizList.Rows[e.RowIndex].Cells["Sr. No."].Value);
 
@@ -731,7 +696,7 @@ namespace QuizApp
             MessageBox.Show("Starting quiz for QuizSet_Id: " + quizSetId);
             pnlQuizList.Visible = false;
             pnlHistory.Visible = false;
-            //pnlUserProfile.Visible = false;
+            pnlUserProfile.Visible = false;
             pnlQuizDash.Visible = true;
             qid = quizSetId;
             questions = GetQuestionsByQuizId(quizSetId);
@@ -881,7 +846,7 @@ namespace QuizApp
             pnlQuizList.Visible = true;
         }
 
-       
+
 
         private void DisplayQuestion(Question question, int cur)
         {
@@ -939,7 +904,20 @@ namespace QuizApp
 
             return questions;
         }
-
+        void InsertAttempt(int isComplete)
+        {
+            string tt = string.Format("{0:D2}:{1:D2}", timetaken / 60, timetaken % 60);
+            getCon();
+            cmd = new SqlCommand("Insert into Attempts_tbl (A_U_Id, A_Q_Id, Score, Total_Que, TimeTaken, A_Date, Completion_Status) values (@uid,@qsid,@score,@tq,@time,@date,@status)", con);
+            cmd.Parameters.AddWithValue("@uid", uid);
+            cmd.Parameters.AddWithValue("@qsid", qid);
+            cmd.Parameters.AddWithValue("@score", score);
+            cmd.Parameters.AddWithValue("@tq", questions.Count);
+            cmd.Parameters.AddWithValue("@time", tt);
+            cmd.Parameters.AddWithValue("@date", DateTime.Now);
+            cmd.Parameters.AddWithValue("@status", isComplete);
+            cmd.ExecuteNonQuery();
+        }
         private void btnViewResults_Click(object sender, EventArgs e)
         {
             pnlQuizDash.Visible = false;
@@ -983,6 +961,55 @@ namespace QuizApp
                 MessageBox.Show("Error loading quiz data: " + ex.Message);
             }
         }
-    }
 
+        private void PaintButtonInCell(DataGridView dgv, DataGridViewCellPaintingEventArgs e, string columnName, string buttonText)
+        {
+            if (e.ColumnIndex == dgv.Columns[columnName].Index && e.RowIndex >= 0)
+            {
+                // Let the DataGridView paint the default cell background (including row selection color)
+                e.PaintBackground(e.ClipBounds, true);
+
+                // Measure the size of the button text
+                Size textSize = TextRenderer.MeasureText(buttonText, e.CellStyle.Font);
+
+                // Calculate the position to center the button within the cell
+                int x = e.CellBounds.X + (e.CellBounds.Width - textSize.Width) / 2;
+                int y = e.CellBounds.Y + (e.CellBounds.Height - textSize.Height) / 2;
+
+                // Define the rectangle for the button with additional padding
+                Rectangle textBackgroundRect = new Rectangle(x - 12, y - 6, textSize.Width + 24, textSize.Height + 12);
+
+                // Set colors for the button's normal and selected states
+                bool isRowSelected = dgv.Rows[e.RowIndex].Selected;
+                Color buttonBackgroundColor = Color.SeaGreen;
+                Color borderColor = isRowSelected ? Color.Green : Color.DarkSeaGreen;
+                Color textColor = Color.White;
+
+                // Draw the button background
+                using (Brush buttonBrush = new SolidBrush(buttonBackgroundColor))
+                {
+                    e.Graphics.FillRectangle(buttonBrush, textBackgroundRect);
+                }
+                int textX = textBackgroundRect.X + (textBackgroundRect.Width - textSize.Width) / 2;
+                int textY = textBackgroundRect.Y + (textBackgroundRect.Height - textSize.Height) / 2;
+
+                // Draw the button border
+                using (Pen borderPen = new Pen(borderColor))
+                {
+                    e.Graphics.DrawRectangle(borderPen, textBackgroundRect);
+                }
+
+                // Draw the button text in bold
+                using (Font boldFont = new Font(e.CellStyle.Font, FontStyle.Bold))
+                {
+                    TextRenderer.DrawText(e.Graphics, buttonText, boldFont, new Point(x, y), textColor);
+                }
+
+                // Prevent default cell content painting (since we're custom painting)
+                e.Handled = true;
+            }
+        }
+
+
+    }
 }
