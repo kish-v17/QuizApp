@@ -553,7 +553,7 @@ namespace QuizApp
             try
             {
                 getCon();
-                string query = "SELECT A_Id AS[Sr No.], Username AS[Username],QuizSet_Title AS[Quiz set], Score AS [Score], Total_Que AS [Total Questions], TimeTaken AS [Time Taken], A_Date AS [Attempt Date], Completion_Status AS [Status] FROM Attempts_tbl Join Users_tbl on A_U_Id=UserId Join QuizSet_tbl on A_Q_Id=Quizset_Id";
+                string query = "SELECT A_Id AS[Sr No.], Username AS[Username],QuizSet_Title AS[Quiz set], Score AS [Score], Total_Que AS [Total Questions], TimeTaken AS [Time Taken], A_Date AS [Attempt Date], CASE WHEN Completion_Status = 1 THEN 'Complete' ELSE 'Incomplete' END AS[Status] FROM Attempts_tbl Join Users_tbl on A_U_Id=UserId Join QuizSet_tbl on A_Q_Id=Quizset_Id";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
